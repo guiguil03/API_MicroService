@@ -7,7 +7,7 @@ services:
       context: ./time-service
       dockerfile: Docker/node/DockerFile
     ports:
-      - "5001:5000"
+      - "3001:3000"
     volumes:
       - ./time-service:/home/node/app
     networks:
@@ -33,7 +33,7 @@ services:
       context: ./user-service
       dockerfile: Docker/node/DockerFile
     ports:
-      - "5002:5000"
+      - "3000:3000"
     volumes:
       - ./user-service:/home/node/app
     networks:
@@ -47,7 +47,7 @@ services:
     image: mongo:latest
     container_name: user-mongo
     ports:
-      - "27019:27017" # Port externe différent pour éviter les conflits
+      - "27017:27017" # Port externe différent pour éviter les conflits
     volumes:
       - user-db-data:/data/db
     networks:
