@@ -6,7 +6,7 @@ const port = process.env.PORT || 3002;
 
 // Middleware pour parser le JSON
 //app.use(express.json());
-//connectDB();
+connectDB();
 // Route simple pour tester l'API
 app.use(TimeRouter);
 app.get("/", (req: Request, res: Response) => {
