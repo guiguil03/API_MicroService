@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  # Service time-service
+  time-service:
+    build:
+      context: ./time-service
+      dockerfile: Docker/node/DockerFile
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./time-service:/home/node/app
+    networks:
+      - app-network
+    depends_on:
+      - time-db
+
+  # Service MongoDB pour time-service
+  time-db:
+    build: ./time-service/docker/mongo
+    image: mongo:latest
+    container_name: time-mongo
+    ports:
+      - "27018:27017" # Port externe différent pour éviter les conflits
+    volumes:
+      - time-db-data:/data/db
+    networks:
+      - app-network
+
+  # Service user-service
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Docker/node/DockerFile
+    ports:
+      - "5002:5000"
+    volumes:
+      - ./user-service:/home/node/app
+    networks:
+      - app-network
+    depends_on:
+      - user-db
+
+  # Service MongoDB pour user-service
+  user-db:
+    build: ./user-service/docker/mongo
+    image: mongo:latest
+    container_name: user-mongo
+    ports:
+      - "27019:27017" # Port externe différent pour éviter les conflits
+    volumes:
+      - user-db-data:/data/db
+    networks:
+      - app-network
+
+volumes:
+  time-db-data:
+  user-db-data:
+
+networks:
+  app-network:
+    driver: bridge
