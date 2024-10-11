@@ -1,5 +1,4 @@
 import { Schema, model, Document, Types } from "mongoose";
-import UserModel from "../../../user-service/src/models/UserModel";
 
 interface Timer extends Document {
   user_id: Types.ObjectId;
