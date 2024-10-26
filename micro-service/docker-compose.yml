@@ -5,20 +5,20 @@ services:
     build:
       context: ./api-gateway
       dockerfile: Docker/node/DockerFile
-
     ports:
       - "3000:3000"
+    networks:
+      - app-network
     depends_on:
       - time-service
       - user-service
 
-    # Service user-service
   user-service:
     build:
       context: ./user-service
       dockerfile: Docker/node/DockerFile
     ports:
-      - "3001:3001"
+      - "3001:3000"
     volumes:
       - ./user-service:/home/node/app
     networks:
@@ -26,13 +26,12 @@ services:
     depends_on:
       - user-db
 
-  # Service time-service
   time-service:
     build:
       context: ./time-service
       dockerfile: Docker/node/DockerFile
     ports:
-      - "3002:3002"
+      - "3002:3000"
     volumes:
       - ./time-service:/home/node/app
     networks:
@@ -40,25 +39,21 @@ services:
     depends_on:
       - time-db
 
-  # Service MongoDB pour time-service
   time-db:
-    build: ./time-service/docker/mongo
     image: mongo:latest
     container_name: time-mongo
     ports:
-      - "27018:27017" # Port externe différent pour éviter les conflits
+      - "27018:27017"
     volumes:
       - time-db-data:/data/db
     networks:
       - app-network
 
-  # Service MongoDB pour user-service
   user-db:
-    build: ./user-service/docker/mongo
     image: mongo:latest
     container_name: user-mongo
     ports:
-      - "27017:27017" # Port externe différent pour éviter les conflits
+      - "27017:27017"
     volumes:
       - user-db-data:/data/db
     networks:
