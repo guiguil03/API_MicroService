@@ -3,7 +3,7 @@ import connectDB from "./config/db";
 import userController from "./controllers/UserController";
 import UserRouter from "../src/routes/UserRoute";
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT1 || 3001;
 
 // Middleware pour parser le JSON
 app.use(express.json());

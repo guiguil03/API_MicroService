@@ -4,7 +4,7 @@ const connectDB = async () => {
   try {
     console.log("Connecting to the database Time...");
     const mongoUrl =
-      process.env.MONGO_URL1 || "mongodb://localhost:27017/MicroService-Time";
+      process.env.MONGO_URL1 || "mongodb://time-db:27017/MicroService-Time";
     if (!mongoUrl) {
       throw new Error("MONGO_URI is not defined in the environment variables");
     }

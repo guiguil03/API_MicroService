@@ -4,7 +4,7 @@ services:
   api-gateway:
     build:
       context: ./api-gateway
-      dockerfile: Docker/node/DockerFile
+      dockerfile: Docker/node/Dockerfile
     ports:
       - "3000:3000"
     networks:
@@ -16,7 +16,7 @@ services:
   user-service:
     build:
       context: ./user-service
-      dockerfile: Docker/node/DockerFile
+      dockerfile: Docker/node/Dockerfile
     ports:
       - "3001:3000"
     volumes:
@@ -29,7 +29,7 @@ services:
   time-service:
     build:
       context: ./time-service
-      dockerfile: Docker/node/DockerFile
+      dockerfile: Docker/node/Dockerfile
     ports:
       - "3002:3000"
     volumes:
