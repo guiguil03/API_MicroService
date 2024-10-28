@@ -51,7 +51,7 @@ const ReactionTimePage: React.FC<{
     try {
       console.log("Envoi du temps de réaction :", reactionTime);
       const response = await fetch(
-        `http://localhost:3000/submit-reaction-time/`,
+        `http://localhost:3000/time/submit-reaction-time/`,
         {
           method: "POST",
           headers: {
@@ -74,7 +74,7 @@ const ReactionTimePage: React.FC<{
   const fetchScores = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/reaction-time/${userId}`,
+        `http://localhost:3000/time/reaction-time/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -1,69 +1,40 @@
-import express from "express";
-import axios, { AxiosError } from "axios";
+import express, { Request, Response } from "express";
+import cors from "cors";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
+// Middleware to enable CORS
+app.use(cors());
+
+// Middleware to parse JSON
 app.use(express.json());
 
-const isAxiosError = (error: unknown): error is AxiosError => {
-  return (error as AxiosError).isAxiosError !== undefined;
-};
+// Proxy requests to the User Service
+app.use('/users', createProxyMiddleware({
+  target: 'http://user-service:3001',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/users': '', // Remove /users from the path
+  },
+}));
 
-app.get("/time", async (req, res) => {
-  try {
-    console.log("Appel du service time-service");
-    const response = await axios.get("http://localhost:3002");
-    console.log("Réponse reçue du time-service", response.data);
-    res.json(response.data);
-  } catch (error) {
-    if (isAxiosError(error)) {
-      console.error(
-        "Erreur Axios lors de l'appel du time-service:",
-        error.message
-      );
-      if (error.response) {
-        console.error("Détails de l'erreur Axios :", error.response.data);
-        res.status(error.response.status).json({ error: error.response.data });
-      } else {
-        res.status(500).json({ error: "Erreur de connexion au time-service" });
-      }
-    } else {
-      console.error("Erreur inattendue:", error);
-      res
-        .status(500)
-        .json({ error: "Erreur inconnue lors de l'appel du time-service" });
-    }
-  }
+// Proxy requests to the Time Service
+app.use('/time', createProxyMiddleware({
+  target: 'http://time-service:3002',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/time': '', // Remove /time from the path
+  },
+}));
+
+// Simple route to test the API Gateway
+app.get("/", (req: Request, res: Response) => {
+  res.send("API Gateway is running");
 });
 
-app.get("/users", async (req, res) => {
-  try {
-    console.log("Appel du service user-service");
-    const response = await axios.get("http://localhost:3001");
-    console.log("Réponse reçue du user-service", response.data);
-    res.json(response.data);
-  } catch (error) {
-    if (isAxiosError(error)) {
-      console.error(
-        "Erreur Axios lors de l'appel du user-service:",
-        error.message
-      );
-      if (error.response) {
-        console.error("Détails de l'erreur Axios :", error.response.data);
-        res.status(error.response.status).json({ error: error.response.data });
-      } else {
-        res.status(500).json({ error: "Erreur de connexion au user-service" });
-      }
-    } else {
-      console.error("Erreur inattendue:", error);
-      res
-        .status(500)
-        .json({ error: "Erreur inconnue lors de l'appel du user-service" });
-    }
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`API Gateway en écoute sur le port ${PORT}`);
+// Start the server
+app.listen(port, () => {
+  console.log(`API Gateway started on http://localhost:${port}`);
 });

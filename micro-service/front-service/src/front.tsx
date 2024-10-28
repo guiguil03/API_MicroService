@@ -23,7 +23,7 @@ const Register = ({
     console.log("Is Admin:", isAdmin);
 
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("http://localhost:3000/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +120,7 @@ const Login = ({
     console.log("Email:", email);
 
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://localhost:3000/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
